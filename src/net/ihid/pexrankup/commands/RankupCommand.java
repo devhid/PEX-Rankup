@@ -35,12 +35,16 @@ public class RankupCommand implements CommandExecutor {
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         String prefix = (config.getBoolean("MAIN" + ".prefix-enabled")) ? ChatUtil.color(config.getString("MAIN" + ".prefix")) : "";
 
-        CmdUtil.checkPlayer(cs);
+        try {
+            CmdUtil.checkPlayer(cs);
+            CmdUtil.checkArgs(args, 0);
+            CmdUtil.checkPerm(cs, "pexrankup.rankup");
+        } catch(CmdUtil.CommandException ex) {
+            cs.sendMessage(prefix + ChatUtil.color(ex.getMessage()));
+            return true;
+        }
+
         Player ps = (Player) cs;
-
-        CmdUtil.checkArgs(args, 0);
-        CmdUtil.checkPerm(ps, "pexrankup.rankup");
-
         PermissionUser user = PermissionsEx.getUser(ps);
         String group = getCurrentGroup(user);
 

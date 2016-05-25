@@ -26,8 +26,13 @@ public class RanksCommand {
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         String prefix = (config.getBoolean("MAIN" + ".prefix-enabled")) ? ChatUtil.color(config.getString("MAIN" + ".prefix")) : "";
 
-        CmdUtil.checkPerm(cs, "pexrankup.ranks");
-        CmdUtil.checkArgs(args, 0);
+        try {
+            CmdUtil.checkPerm(cs, "pexrankup.ranks");
+            CmdUtil.checkArgs(args, 0);
+        } catch(CmdUtil.CommandException ex) {
+            cs.sendMessage(prefix + ChatUtil.color(ex.getMessage()));
+            return true;
+        }
 
         cs.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-list")));
         for (String rank : plugin.getConfig().getConfigurationSection("LADDER").getKeys(false)) {

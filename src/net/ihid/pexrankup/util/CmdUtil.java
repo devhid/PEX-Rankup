@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
  */
 public class CmdUtil {
 
-    private static class CommandException extends RuntimeException {
+    public static class CommandException extends RuntimeException {
         CommandException(String msg) {
             super(msg);
         }
