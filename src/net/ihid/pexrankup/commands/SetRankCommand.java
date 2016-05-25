@@ -52,6 +52,13 @@ public class SetRankCommand implements CommandExecutor {
 
         final PermissionUser user = PermissionsEx.getUser((Player) cs);
         user.setParentsIdentifier(setRank(user, group));
+        user.save();
+
+        cs.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".setrank-success")
+                .replace("{username}", target.getName())
+                .replace("{rank}", group)));
+        target.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".setrank-received")
+                .replace("{rank}", group)));
 
         return true;
     }

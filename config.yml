@@ -23,6 +23,7 @@ RANKUP:
   rank-list-format: "&4 {rank} &7- &c$&7{cost}"
   setrank-invalid-rank: "&cThe specified rank is not in the rank ladder."
   setrank-success: "&7You have set &c{username}'s&7 rank to &c{rank}&7."
+  setrank-received: "&7Your rank has successfully been set to &c{rank}&7."
   execute-commands-upon-setrank:
   - "pex user {username} group set {rank}"
   execute-commands-upon-rankup:
