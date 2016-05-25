@@ -10,3 +10,7 @@ commands:
      rankup:
        aliases: [ru]
        description: The command used to rankup your rank.
+     ranks:
+       description: The command used to list all ranks in the ladder.
+     setrank:
+       description: The command used to set someone's rank manually.

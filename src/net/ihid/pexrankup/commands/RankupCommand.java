@@ -1,5 +1,6 @@
 package net.ihid.pexrankup.commands;
 
+import lombok.NonNull;
 import net.ihid.pexrankup.util.ChatUtil;
 import net.ihid.pexrankup.util.CmdUtil;
 import net.ihid.pexrankup.RankupPlugin;
@@ -37,10 +38,10 @@ public class RankupCommand implements CommandExecutor {
 
         try {
             CmdUtil.checkPlayer(cs);
-            CmdUtil.checkArgs(args, 0);
             CmdUtil.checkPerm(cs, "pexrankup.rankup");
+            CmdUtil.checkArgs(args, 0);
         } catch(CmdUtil.CommandException ex) {
-            cs.sendMessage(prefix + ChatUtil.color(ex.getMessage()));
+            cs.sendMessage(prefix + ex.getMessage());
             return true;
         }
 

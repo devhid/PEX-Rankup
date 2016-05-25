@@ -21,6 +21,7 @@ RANKUP:
   rank-up-broadcast: "&c{username} &7has ranked up to &c{rank}&7."
   rank-list: "&cHere are all the ranks and their costs:"
   rank-list-format: "&4 {rank} &7- &c$&7{cost}"
+  setrank-invalid-rank: "&cThe specified rank is not in the rank ladder."
   setrank-success: "&7You have set &c{username}'s&7 rank to &c{rank}&7."
   execute-commands-upon-setrank:
   - "pex user {username} group set {rank}"
@@ -53,4 +54,4 @@ LADDER:
    W: 29000000
    X: 67000000
    Y: 100000000
-   Z: 0
+   Z: 300000000

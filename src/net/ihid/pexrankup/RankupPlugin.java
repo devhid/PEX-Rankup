@@ -1,7 +1,9 @@
 package net.ihid.pexrankup;
 
 import lombok.Getter;
+import net.ihid.pexrankup.commands.RanksCommand;
 import net.ihid.pexrankup.commands.RankupCommand;
+import net.ihid.pexrankup.commands.SetRankCommand;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,6 +32,8 @@ public class RankupPlugin extends JavaPlugin {
 
     private void loadCommands() {
         getCommand("rankup").setExecutor(new RankupCommand(this));
+        getCommand("ranks").setExecutor(new RanksCommand(this));
+        getCommand("setrank").setExecutor(new SetRankCommand(this));
     }
 
     @Override
