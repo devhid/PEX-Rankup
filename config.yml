@@ -14,20 +14,21 @@ MAIN:
   player-offline: "&cThe specified player is currently offline."
 
 RANKUP:
-  first-rank: 'A'
   last-rank: 'Z'
   last-rank-message: "&cYou already have the last rank."
+
   not-enough-money: "&7You need &c${cost} &7to rank up to &c{rank}&7."
   rank-up-broadcast: "&c{username} &7has ranked up to &c{rank}&7."
+
   rank-list: "&cHere are all the ranks and their costs:"
   rank-list-format: "&4 {rank} &7- &c$&7{cost}"
+
   setrank-invalid-rank: "&cThe specified rank is not in the rank ladder."
   setrank-success: "&7You have set &c{username}'s&7 rank to &c{rank}&7."
   setrank-received: "&7Your rank has successfully been set to &c{rank}&7."
-  execute-commands-upon-setrank:
-  - "pex user {username} group set {rank}"
-  execute-commands-upon-rankup:
-  - "pex user {username} group set {rank}"
+
+  execute-commands-upon-setrank: {}
+  execute-commands-upon-rankup: {}
 
 LADDER:
    A: 0

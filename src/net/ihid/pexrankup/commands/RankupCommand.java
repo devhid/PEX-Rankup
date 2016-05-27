@@ -64,6 +64,8 @@ public class RankupCommand implements CommandExecutor {
         }
 
         if(plugin.economy.withdrawPlayer(ps, rawCost.doubleValue()).transactionSuccess()) {
+            executeCommands(user, getNextRank(user));
+
             user.setParentsIdentifier(udpateRank(user));
             user.save();
 
@@ -71,6 +73,17 @@ public class RankupCommand implements CommandExecutor {
             Bukkit.broadcastMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-up-broadcast").replace("{username}", ps.getName()).replace("{rank}", group)));
         }
         return true;
+    }
+
+    private void executeCommands(PermissionUser user, String rank) {
+        String old = getCurrentGroup(user);
+
+        for(String cmd: config.getStringList("RANKUP" + ".execute-commands-on-rankup")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
+                    .replace("{username}", user.getName())
+                    .replace("{rank}", rank)
+                    .replace("{oldrank}", old));
+        }
     }
 
     private List<String> udpateRank(PermissionUser user) {

@@ -51,6 +51,8 @@ public class SetRankCommand implements CommandExecutor {
         }
 
         final PermissionUser user = PermissionsEx.getUser((Player) cs);
+        executeCommands(user, group);
+
         user.setParentsIdentifier(setRank(user, group));
         user.save();
 
@@ -61,6 +63,29 @@ public class SetRankCommand implements CommandExecutor {
                 .replace("{rank}", group)));
 
         return true;
+    }
+
+    private void executeCommands(PermissionUser user, String rank) {
+        String old = getCurrentGroup(user);
+
+        for(String cmd: config.getStringList("RANKUP" + ".execute-commands-on-setrank")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
+                    .replace("{username}", user.getName())
+                    .replace("{rank}", rank)
+                    .replace("{oldrank}", old));
+        }
+    }
+
+    private String getCurrentGroup(PermissionUser user) {
+        for(String rank: config.getConfigurationSection("LADDER").getKeys(false)) {
+            for(String group: user.getParentIdentifiers()) {
+                if(rank.equalsIgnoreCase(group)) {
+                    return rank;
+                }
+            }
+        }
+        System.out.println("Could not find current group of " + user.getName() + ".");
+        return null;
     }
 
     private List<String> setRank(PermissionUser user, String group) {
