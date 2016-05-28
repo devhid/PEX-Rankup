@@ -101,10 +101,12 @@ public class RankupCommand implements CommandExecutor {
     }
 
     private String getCurrentGroup(PermissionUser user) {
-        for(String rank: config.getConfigurationSection("LADDER").getKeys(false)) {
+        List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
+
+        for(int i = ranks.size()-1; i >= 0; i--) {
             for(String group: user.getParentIdentifiers()) {
-                if(rank.equalsIgnoreCase(group)) {
-                    return rank;
+                if(group.equalsIgnoreCase(ranks.get(i))) {
+                    return ranks.get(i);
                 }
             }
         }
@@ -113,12 +115,12 @@ public class RankupCommand implements CommandExecutor {
     }
 
     private String getNextRank(PermissionUser user) {
-        final Set<String> ranks = config.getConfigurationSection("LADDER").getKeys(false);
+        final List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
 
-        for(int i = 0; i < ranks.size(); i++) {
+        for(int i = ranks.size()-1; i >= 0; i--) {
             for(String group: user.getParentIdentifiers()) {
-                if(group.equalsIgnoreCase((String) ranks.toArray()[i])) {
-                    return (String) ranks.toArray()[i+1];
+                if(group.equalsIgnoreCase(ranks.get(i))) {
+                    return ranks.get(i+1);
                 }
             }
         }

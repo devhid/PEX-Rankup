@@ -50,7 +50,7 @@ public class SetRankCommand implements CommandExecutor {
             return true;
         }
 
-        final PermissionUser user = PermissionsEx.getUser((Player) cs);
+        final PermissionUser user = PermissionsEx.getUser(target);
         executeCommands(user, group);
 
         user.setParentsIdentifier(setRank(user, group));
@@ -77,10 +77,12 @@ public class SetRankCommand implements CommandExecutor {
     }
 
     private String getCurrentGroup(PermissionUser user) {
-        for(String rank: config.getConfigurationSection("LADDER").getKeys(false)) {
+        List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
+
+        for(int i = ranks.size()-1; i >= 0; i--) {
             for(String group: user.getParentIdentifiers()) {
-                if(rank.equalsIgnoreCase(group)) {
-                    return rank;
+                if(group.equalsIgnoreCase(ranks.get(i))) {
+                    return ranks.get(i);
                 }
             }
         }
