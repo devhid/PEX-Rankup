@@ -1,8 +1,8 @@
 #===============================================[ Notes ]================================================#
-# name: Rankup                                                                                           #
+# name: PEX-Rankup                                                                                       #
 # author: Hid                                                                                            #
-# version: 2.0                                                                                           #
-# notice: This plugin will work with both Java 7 and 8 and only has been tested with Spigot 1.8.         #
+# version: 2.2.1                                                                                           #
+# notice: This plugin will work with both Java 7 and 8.                                                  #
 #========================================================================================================#
 
 MAIN:

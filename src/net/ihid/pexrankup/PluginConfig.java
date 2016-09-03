@@ -1,15 +1,10 @@
 package net.ihid.pexrankup;
 
-/**
- * Created by Mikey on 5/23/2016.
- */
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.*;
 
-public class PluginConfig {
+class PluginConfig {
 
     private final String fileName;
     private final JavaPlugin plugin;

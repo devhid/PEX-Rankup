@@ -11,22 +11,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-/**
- * Created by Mikey on 5/23/2016.
- */
 public class SetRankCommand implements CommandExecutor {
-    private RankupPlugin plugin;
+    private final YamlConfiguration config;
 
-    private YamlConfiguration config;
-
-    public SetRankCommand(RankupPlugin instance) {
-        plugin = instance;
-        config = instance.getConfig();
+    public SetRankCommand(RankupPlugin plugin) {
+        this.config = plugin.getConfig();
     }
 
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
@@ -92,7 +84,7 @@ public class SetRankCommand implements CommandExecutor {
 
     private List<String> setRank(PermissionUser user, String group) {
         List<String> newParents = new ArrayList<>();
-        final List<String> parents = user.getParentIdentifiers();
+        List<String> parents = user.getParentIdentifiers();
 
         for(int i = 0; i < parents.size(); i++) {
             if(isValid(parents.get(i))) {

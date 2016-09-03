@@ -1,7 +1,7 @@
 name: PEX-Rankup
 author: Hid
 main: net.ihid.pexrankup.RankupPlugin
-version: 2.0
+version: 2.2.1
 description: A lightweight rankup plugin designed for PEX based prison servers.
 depend: [Vault, PermissionsEx]
 load: POSTWORLD

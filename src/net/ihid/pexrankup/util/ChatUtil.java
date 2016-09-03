@@ -1,11 +1,11 @@
 package net.ihid.pexrankup.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.ChatColor;
 
-/**
- * Created by Mikey on 5/24/2016.
- */
-public class ChatUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ChatUtil {
     public static String color(String msg) {
         return ChatColor.translateAlternateColorCodes('&', msg);
     }

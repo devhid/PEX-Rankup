@@ -2,9 +2,6 @@ package net.ihid.pexrankup;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-/**
- * Created by Mikey on 5/24/2016.
- */
 public enum Lang {
     NO_PERMISSION("MAIN" + ".no-permission"),
     IMPROPER_USAGE("MAIN" + ".improper-usage"),
@@ -12,7 +9,7 @@ public enum Lang {
     PLAYER_OFFLINE("MAIN" + ".player-offline");
 
     private final String path;
-    private YamlConfiguration config = RankupPlugin.i.getConfig();
+    private YamlConfiguration config = RankupPlugin.getPlugin().getConfig();
 
     Lang(String path) {
         this.path = path;

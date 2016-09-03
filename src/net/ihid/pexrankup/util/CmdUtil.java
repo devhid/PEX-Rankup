@@ -1,14 +1,13 @@
 package net.ihid.pexrankup.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.ihid.pexrankup.Lang;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Created by Mikey on 5/23/2016.
- */
-public class CmdUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class CmdUtil {
 
     public static class CommandException extends RuntimeException {
         CommandException(String msg) {

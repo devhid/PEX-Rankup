@@ -7,21 +7,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
-/**
- * Created by Mikey on 5/23/2016.
- */
 public class RanksCommand implements CommandExecutor {
-    private RankupPlugin plugin;
+    private final YamlConfiguration config;
 
-    private YamlConfiguration config;
-
-    public RanksCommand(RankupPlugin instance) {
-        plugin = instance;
-        config = instance.getConfig();
+    public RanksCommand(RankupPlugin plugin) {
+        this.config = plugin.getConfig();
     }
 
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
@@ -36,7 +29,8 @@ public class RanksCommand implements CommandExecutor {
         }
 
         cs.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-list")));
-        for (String rank : plugin.getConfig().getConfigurationSection("LADDER").getKeys(false)) {
+
+        for (String rank : config.getConfigurationSection("LADDER").getKeys(false)) {
             String cost = NumberFormat.getInstance().format(BigDecimal.valueOf(config.getDouble("LADDER." + rank)));
             cs.sendMessage(ChatUtil.color(config.getString("RANKUP" + ".rank-list-format")
                     .replace("{rank}", rank)

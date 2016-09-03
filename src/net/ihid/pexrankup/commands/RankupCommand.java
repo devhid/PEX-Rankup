@@ -1,6 +1,5 @@
 package net.ihid.pexrankup.commands;
 
-import lombok.NonNull;
 import net.ihid.pexrankup.util.ChatUtil;
 import net.ihid.pexrankup.util.CmdUtil;
 import net.ihid.pexrankup.RankupPlugin;
@@ -12,24 +11,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-/**
- * Created by Mikey on 5/23/2016.
- */
 public class RankupCommand implements CommandExecutor {
-    private RankupPlugin plugin;
+    private final YamlConfiguration config;
 
-    private YamlConfiguration config;
-
-    public RankupCommand(RankupPlugin instance) {
-        plugin = instance;
-        config = plugin.getConfig();
+    public RankupCommand(RankupPlugin plugin) {
+        this.config = plugin.getConfig();
     }
 
     @Override
@@ -54,16 +45,16 @@ public class RankupCommand implements CommandExecutor {
             return true;
         }
 
-        BigDecimal rawCost = BigDecimal.valueOf(config.getDouble("LADDER." + getNextRank(user)));
-        BigDecimal balance = BigDecimal.valueOf(plugin.economy.getBalance(ps));
-        String cost = NumberFormat.getInstance().format(rawCost);
+        BigDecimal rawCost = getCostOfNextRank(user);
+        BigDecimal balance = getBalance(ps);
+        String cost = getCostOfNextRankFormatted(user);
 
         if(balance.doubleValue() < rawCost.doubleValue()) {
             ps.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".not-enough-money").replace("{cost}", cost).replace("{rank}", getNextRank(user))));
             return true;
         }
 
-        if(plugin.economy.withdrawPlayer(ps, rawCost.doubleValue()).transactionSuccess()) {
+        if(RankupPlugin.economy.withdrawPlayer(ps, rawCost.doubleValue()).transactionSuccess()) {
             executeCommands(user, getNextRank(user));
 
             user.setParentsIdentifier(udpateRank(user));
@@ -73,6 +64,22 @@ public class RankupCommand implements CommandExecutor {
             Bukkit.broadcastMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-up-broadcast").replace("{username}", ps.getName()).replace("{rank}", group)));
         }
         return true;
+    }
+
+    public BigDecimal getBalance(Player player) {
+        return BigDecimal.valueOf(RankupPlugin.economy.getBalance(player));
+    }
+
+    public BigDecimal getCostOfNextRank(PermissionUser user) {
+        return BigDecimal.valueOf(config.getDouble("LADDER." + getNextRank(user)));
+    }
+
+    public String getCostOfNextRankString(PermissionUser user) {
+        return getCostOfNextRank(user).toString();
+    }
+
+    public String getCostOfNextRankFormatted(PermissionUser user) {
+        return NumberFormat.getInstance().format(getCostOfNextRank(user));
     }
 
     private void executeCommands(PermissionUser user, String rank) {
@@ -88,7 +95,7 @@ public class RankupCommand implements CommandExecutor {
 
     private List<String> udpateRank(PermissionUser user) {
         List<String> newParents = new ArrayList<>();
-        final List<String> parents = user.getParentIdentifiers();
+        List<String> parents = user.getParentIdentifiers();
 
         for(int i = 0; i < parents.size(); i++) {
             if(parents.get(i).equalsIgnoreCase(getCurrentGroup(user))) {
@@ -100,7 +107,7 @@ public class RankupCommand implements CommandExecutor {
         return newParents;
     }
 
-    private String getCurrentGroup(PermissionUser user) {
+    public String getCurrentGroup(PermissionUser user) {
         List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
 
         for(int i = ranks.size()-1; i >= 0; i--) {
@@ -114,8 +121,8 @@ public class RankupCommand implements CommandExecutor {
         return null;
     }
 
-    private String getNextRank(PermissionUser user) {
-        final List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
+    public String getNextRank(PermissionUser user) throws IndexOutOfBoundsException {
+        List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
 
         for(int i = ranks.size()-1; i >= 0; i--) {
             for(String group: user.getParentIdentifiers()) {
