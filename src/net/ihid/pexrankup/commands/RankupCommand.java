@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,7 @@ public class RankupCommand implements CommandExecutor {
     }
 
     public String getCostOfNextRankFormatted(PermissionUser user) {
-        return NumberFormat.getInstance().format(getCostOfNextRank(user));
+        return new DecimalFormat("#,###").format(getCostOfNextRank(user));
     }
 
     private void executeCommands(PermissionUser user, String rank) {
@@ -121,13 +122,13 @@ public class RankupCommand implements CommandExecutor {
         return null;
     }
 
-    public String getNextRank(PermissionUser user) throws IndexOutOfBoundsException {
+    public String getNextRank(PermissionUser user)  {
         List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
 
         for(int i = ranks.size()-1; i >= 0; i--) {
             for(String group: user.getParentIdentifiers()) {
                 if(group.equalsIgnoreCase(ranks.get(i))) {
-                    return ranks.get(i+1);
+                    return ranks.get(i+1) != null ? ranks.get(i+1) : "N/A";
                 }
             }
         }

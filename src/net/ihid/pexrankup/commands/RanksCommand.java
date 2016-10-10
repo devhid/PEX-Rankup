@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class RanksCommand implements CommandExecutor {
@@ -31,7 +32,8 @@ public class RanksCommand implements CommandExecutor {
         cs.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-list")));
 
         for (String rank : config.getConfigurationSection("LADDER").getKeys(false)) {
-            String cost = NumberFormat.getInstance().format(BigDecimal.valueOf(config.getDouble("LADDER." + rank)));
+            String cost = new DecimalFormat("#,###").format(BigDecimal.valueOf(config.getDouble("LADDER." + rank)));
+
             cs.sendMessage(ChatUtil.color(config.getString("RANKUP" + ".rank-list-format")
                     .replace("{rank}", rank)
                     .replace("{cost}", cost)));
