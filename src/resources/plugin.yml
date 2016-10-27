@@ -1,0 +1,16 @@
+name: PEX-Rankup
+author: Hid
+main: net.ihid.pexrankup.RankupPlugin
+version: 2.2.3
+description: A lightweight rankup plugin designed for PEX based prison servers.
+depend: [Vault, PermissionsEx]
+load: POSTWORLD
+
+commands:
+     rankup:
+       aliases: [ru]
+       description: The command used to rankup your rank.
+     ranks:
+       description: The command used to list all ranks in the ladder.
+     setrank:
+       description: The command used to set someone's rank manually.
