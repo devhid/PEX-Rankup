@@ -1,0 +1,59 @@
+#===============================================[ Notes ]================================================#
+# name: PEX-Rankup                                                                                       #
+# author: Hid                                                                                            #
+# version: 2.3.0                                                                                         #
+# notice: This plugin will work with both Java 7 and 8.                                                  #
+#========================================================================================================#
+
+MAIN:
+  prefix-enabled: true
+  prefix: "&4Rankup &8// &7"
+  no-permission: "&cYou do not have permission to execute this command."
+  improper-usage: "&cImproper usage. Proper usage for this command: /rankup | ranks | setrank <player> <rank>."
+  invalid-sender: "&cInvalid sender. This command can only be performed by a player."
+  player-offline: "&cThe specified player is currently offline."
+
+RANKUP:
+  last-rank: 'Z'
+  last-rank-message: "&cYou already have the last rank."
+
+  not-enough-money: "&7You need &c${cost} &7to rank up to &c{rank}&7."
+  rank-up-broadcast: "&c{username} &7has ranked up to &c{rank}&7."
+
+  rank-list: "&cHere are all the ranks and their costs:"
+  rank-list-format: "&4 {rank} &7- &c$&7{cost}"
+
+  setrank-invalid-rank: "&cThe specified rank is not in the rank ladder."
+  setrank-success: "&7You have set &c{username}'s&7 rank to &c{rank}&7."
+  setrank-received: "&7Your rank has successfully been set to &c{rank}&7."
+
+  execute-commands-upon-setrank: {}
+  execute-commands-upon-rankup: {}
+
+LADDER:
+   A: 0
+   B: 100
+   C: 500
+   D: 1200
+   E: 3000
+   F: 5000
+   G: 7500
+   H: 11000
+   I: 16000
+   J: 22000
+   K: 30000
+   L: 50000
+   M: 80000
+   N: 140000
+   O: 200000
+   P: 380000
+   Q: 700000
+   R: 1300000
+   S: 2000000
+   T: 4000000
+   U: 8000000
+   V: 14000000
+   W: 29000000
+   X: 67000000
+   Y: 100000000
+   Z: 300000000

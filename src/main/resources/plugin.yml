@@ -1,0 +1,16 @@
+name: PEX-Rankup
+version: ${project.version}
+main: net.devhid.pexrankup.RankupPlugin
+author: Hid
+description: Simple and lightweight rank-up plugin for prison servers.
+
+commands:
+    pexrankup-rankup:
+        aliases: [rankup, ru]
+        description: Ranks up a player to the next rank in the ladder.
+    pexrankup-setrank:
+        aliases: [setrank, srank, setr]
+        description: Set a player's rank manually.
+    pexrankup-ranks:
+        aliases: [ranks]
+        description: List all ranks and their prices in the ladder.
