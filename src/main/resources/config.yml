@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: PEX-Rankup                                                                                       #
 # author: Hid                                                                                            #
-# version: 2.3.0                                                                                         #
+# version: 2.3.1                                                                                         #
 # notice: This plugin will work with both Java 7 and 8.                                                  #
 #========================================================================================================#
 
@@ -26,6 +26,8 @@ RANKUP:
   setrank-invalid-rank: "&cThe specified rank is not in the rank ladder."
   setrank-success: "&7You have set &c{username}'s&7 rank to &c{rank}&7."
   setrank-received: "&7Your rank has successfully been set to &c{rank}&7."
+
+  scoreboard-next-rank-none: "N/A"
 
   execute-commands-upon-setrank: {}
   execute-commands-upon-rankup: {}

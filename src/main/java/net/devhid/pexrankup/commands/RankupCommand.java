@@ -144,7 +144,11 @@ public class RankupCommand implements CommandExecutor {
         for(int i = ranks.size()-1; i >= 0; i--) {
             for(String group: user.getParentIdentifiers()) {
                 if(group.equalsIgnoreCase(ranks.get(i))) {
-                    return ranks.get(i+1) != null ? ranks.get(i+1) : "N/A";
+                    try {
+                        return ranks.get(i + 1);
+                    } catch(IndexOutOfBoundsException | NullPointerException ex) {
+                        return ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".scoreboard-next-rank-none"));
+                    }
                 }
             }
         }
