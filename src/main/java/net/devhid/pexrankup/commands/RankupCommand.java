@@ -89,6 +89,14 @@ public class RankupCommand implements CommandExecutor {
         return true;
     }
 
+    public BigDecimal getRemainingPrice(PermissionUser user) {
+        return getCostOfNextRank(user).subtract(getBalance(user.getPlayer()));
+    }
+
+    public String getRemainingPriceFormatted(PermissionUser user) {
+        return new DecimalFormat("#,###").format(getRemainingPrice(user));
+    }
+
     public BigDecimal getBalance(Player player) {
         return BigDecimal.valueOf(RankupPlugin.getEconomy().getBalance(player));
     }

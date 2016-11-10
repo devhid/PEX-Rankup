@@ -4,6 +4,7 @@ import net.devhid.pexrankup.RankupPlugin;
 import net.devhid.pexrankup.commands.RankupCommand;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
+
 import java.math.BigDecimal;
 
 public class RankupAPI {
@@ -41,6 +42,27 @@ public class RankupAPI {
      **/
     public String getNextRank(PermissionUser user) {
         return rankupCommand.getNextRank(user);
+    }
+
+    /**
+     * Returns the money required to rank up to the next rank.
+     *
+     * @param user the PermissionUser whose remaining rank price is being calculated.
+     * @return     the difference between the next rank's cost and the user's balance in BigDecimal representation.
+     **/
+    public BigDecimal getRemainingPrice(PermissionUser user) {
+        return rankupCommand.getRemainingPrice(user);
+    }
+
+    /**
+     * Returns the money required to rank up to the next rank.
+     * Formatted version adds commas and removes scientific notation.
+     *
+     * @param user the PermissionUser whose remaining rank price is being calculated.
+     * @return     the difference between the next rank's cost and the user's balance in formatted String representation.
+     **/
+    public String getRemainingPriceFormatted(PermissionUser user) {
+        return rankupCommand.getRemainingPriceFormatted(user);
     }
 
     /**
