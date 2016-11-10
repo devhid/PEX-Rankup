@@ -1,8 +1,8 @@
 package net.devhid.pexrankup.commands;
 
+import net.devhid.pexrankup.RankupPlugin;
 import net.devhid.pexrankup.api.events.PostRankupEvent;
 import net.devhid.pexrankup.api.events.PreRankupEvent;
-import net.devhid.pexrankup.RankupPlugin;
 import net.devhid.pexrankup.util.ChatUtil;
 import net.devhid.pexrankup.util.CommandUtil;
 import org.bukkit.Bukkit;
@@ -74,8 +74,14 @@ public class RankupCommand implements CommandExecutor {
                     user.save();
 
                     group = getCurrentGroup(user);
-                    plugin.getServer().broadcastMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-up-broadcast")
-                            .replace("{username}", ps.getName()).replace("{rank}", group)));
+
+                    cs.sendMessage(prefix + config.getString("RANKUP" + ".rank-up-message")
+                            .replace("{rank}", group));
+
+                    if(config.getBoolean("RANKUP" + ".rank-up-message.broadcast")) {
+                        plugin.getServer().broadcastMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-up-message.broadcast-message")
+                                .replace("{username}", ps.getName()).replace("{rank}", group)));
+                    }
                     plugin.getServer().getPluginManager().callEvent(new PostRankupEvent(ps, nextRank, balance.doubleValue()));
                 }
             }

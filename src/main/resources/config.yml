@@ -18,7 +18,9 @@ RANKUP:
   last-rank-message: "&cYou already have the last rank."
 
   not-enough-money: "&7You need &c${cost} &7to rank up to &c{rank}&7."
-  rank-up-broadcast: "&c{username} &7has ranked up to &c{rank}&7."
+  rank-up-message: "&7You have successfully ranked up to &c{rank}&7."
+      broadcast: true
+      broadcast-message: "&c{username} &7has ranked up to &c{rank}&7."
 
   rank-list: "&cHere are all the ranks and their costs:"
   rank-list-format: "&4 {rank} &7- &c$&7{cost}"
