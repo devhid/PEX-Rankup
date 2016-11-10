@@ -116,7 +116,7 @@ public class RankupCommand implements CommandExecutor {
     private void executeCommands(PermissionUser user, String rank) {
         String old = getCurrentGroup(user);
 
-        for(String cmd: config.getStringList("RANKUP" + ".execute-commands-on-rankup")) {
+        for(String cmd: config.getStringList("RANKUP" + ".execute-commands-upon-rankup")) {
             plugin.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd
                     .replace("{username}", user.getName())
                     .replace("{rank}", rank)
