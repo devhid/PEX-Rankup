@@ -1,66 +1,66 @@
 package net.devhid.pexrankup.commands;
 
+import net.devhid.pexrankup.RankupManager;
 import net.devhid.pexrankup.RankupPlugin;
 import net.devhid.pexrankup.api.events.PostRankupEvent;
 import net.devhid.pexrankup.api.events.PreRankupEvent;
 import net.devhid.pexrankup.util.ChatUtil;
 import net.devhid.pexrankup.util.CommandUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class RankupCommand implements CommandExecutor {
     private final RankupPlugin plugin;
-    private final FileConfiguration config;
+    private final RankupManager rankupManager;
 
     public RankupCommand(RankupPlugin plugin) {
         this.plugin = plugin;
-        this.config = plugin.getConfig();
+        this.rankupManager = plugin.getRankupManager();
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         String prefix = plugin.getPrefix();
 
         try {
-            CommandUtil.checkPlayer(cs);
-            CommandUtil.checkPerm(cs, "pexrankup.rankup");
+            CommandUtil.checkPlayer(sender);
+            CommandUtil.checkPerm(sender, "pexrankup.rankup");
             CommandUtil.checkArgs(args, 0);
         } catch(CommandUtil.CommandException ex) {
-            cs.sendMessage(prefix + ex.getMessage());
+            sender.sendMessage(prefix + ex.getMessage());
             return true;
         }
 
-        Player ps = (Player) cs;
+        Player ps = (Player) sender;
         PermissionUser user = PermissionsEx.getUser(ps);
-        String group = getCurrentGroup(user);
+        String group = rankupManager.getCurrentGroup(user);
 
-        if(group.equalsIgnoreCase(config.getString("RANKUP" + ".last-rank"))) {
-            ps.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".last-rank-message")));
+        if(group.equalsIgnoreCase(plugin.getConfig().getString("RANKUP" + ".last-rank"))) {
+            ps.sendMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".last-rank-message")));
             return true;
         }
 
-        BigDecimal rawCost = getCostOfNextRank(user);
-        BigDecimal balance = getBalance(ps);
-        String cost = getCostOfNextRankFormatted(user);
+        BigDecimal rawCost = rankupManager.getCostOfNextRank(user);
+        BigDecimal balance = rankupManager.getBalance(ps);
+        String cost = rankupManager.getCostOfNextRankFormatted(user);
 
         if(balance.doubleValue() < rawCost.doubleValue()) {
-            ps.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".not-enough-money").replace("{cost}", cost).replace("{rank}", getNextRank(user))));
+            ps.sendMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".not-enough-money")
+                    .replace("{cost}", cost)
+                    .replace("{remaining-price}", rankupManager.getRemainingPriceFormatted(user))
+                    .replace("{rank}", rankupManager.getNextRank(user))));
             return true;
         }
 
         if(RankupPlugin.getEconomy().getBalance(ps) >= rawCost.doubleValue()) {
-            String nextRank = getNextRank(user);
+            String nextRank = rankupManager.getNextRank(user);
 
             PreRankupEvent preRankupEvent = new PreRankupEvent(ps, group, nextRank, balance.doubleValue(), rawCost.doubleValue());
             plugin.getServer().getPluginManager().callEvent(preRankupEvent);
@@ -68,105 +68,25 @@ public class RankupCommand implements CommandExecutor {
             if(!preRankupEvent.isCancelled()) {
                 if (RankupPlugin.getEconomy().withdrawPlayer(ps, rawCost.doubleValue()).transactionSuccess()) {
 
-                    executeCommands(user, nextRank);
+                    rankupManager.executeCommands(user, nextRank, "rankup");
 
-                    user.setParentsIdentifier(udpateRank(user));
+                    user.setParentsIdentifier(rankupManager.udpateRank(user));
                     user.save();
 
-                    group = getCurrentGroup(user);
+                    group = rankupManager.getCurrentGroup(user);
 
-                    cs.sendMessage(prefix + config.getString("RANKUP" + ".rank-up-message")
-                            .replace("{rank}", group));
-
-                    if(config.getBoolean("RANKUP" + ".rank-up-message.broadcast")) {
-                        plugin.getServer().broadcastMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-up-message.broadcast-message")
+                    if(plugin.getConfig().getBoolean("RANKUP" + ".rank-up-message.broadcast")) {
+                        plugin.getServer().broadcastMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".rank-up-message.broadcast-message")
                                 .replace("{username}", ps.getName()).replace("{rank}", group)));
                     }
+
+                    sender.sendMessage(ChatUtil.color(prefix + plugin.getConfig().getString("RANKUP" + ".rank-up-message.player-message")
+                            .replace("{rank}", group)));
+
                     plugin.getServer().getPluginManager().callEvent(new PostRankupEvent(ps, nextRank, balance.doubleValue()));
                 }
             }
         }
         return true;
-    }
-
-    public BigDecimal getRemainingPrice(PermissionUser user) {
-        return getCostOfNextRank(user).subtract(getBalance(user.getPlayer()));
-    }
-
-    public String getRemainingPriceFormatted(PermissionUser user) {
-        return new DecimalFormat("#,###").format(getRemainingPrice(user));
-    }
-
-    public BigDecimal getBalance(Player player) {
-        return BigDecimal.valueOf(RankupPlugin.getEconomy().getBalance(player));
-    }
-
-    public BigDecimal getCostOfNextRank(PermissionUser user) {
-        return BigDecimal.valueOf(config.getDouble("LADDER." + getNextRank(user)));
-    }
-
-    public String getCostOfNextRankString(PermissionUser user) {
-        return getCostOfNextRank(user).toString();
-    }
-
-    public String getCostOfNextRankFormatted(PermissionUser user) {
-        return new DecimalFormat("#,###").format(getCostOfNextRank(user));
-    }
-
-    private void executeCommands(PermissionUser user, String rank) {
-        String old = getCurrentGroup(user);
-
-        for(String cmd: config.getStringList("RANKUP" + ".execute-commands-upon-rankup")) {
-            plugin.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd
-                    .replace("{username}", user.getName())
-                    .replace("{rank}", rank)
-                    .replace("{oldrank}", old));
-        }
-    }
-
-    private List<String> udpateRank(PermissionUser user) {
-        List<String> newParents = new ArrayList<>();
-        List<String> parents = user.getParentIdentifiers();
-
-        for(int i = 0; i < parents.size(); i++) {
-            if(parents.get(i).equalsIgnoreCase(getCurrentGroup(user))) {
-                newParents.add(getNextRank(user));
-                continue;
-            }
-            newParents.add(parents.get(i));
-        }
-        return newParents;
-    }
-
-    public String getCurrentGroup(PermissionUser user) {
-        List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
-
-        for(int i = ranks.size()-1; i >= 0; i--) {
-            for(String group: user.getParentIdentifiers()) {
-                if(group.equalsIgnoreCase(ranks.get(i))) {
-                    return ranks.get(i);
-                }
-            }
-        }
-        System.out.println("Could not find current group of " + user.getName() + ".");
-        return null;
-    }
-
-    public String getNextRank(PermissionUser user)  {
-        List<String> ranks = new ArrayList<>(config.getConfigurationSection("LADDER").getKeys(false));
-
-        for(int i = ranks.size()-1; i >= 0; i--) {
-            for(String group: user.getParentIdentifiers()) {
-                if(group.equalsIgnoreCase(ranks.get(i))) {
-                    try {
-                        return ranks.get(i + 1);
-                    } catch(IndexOutOfBoundsException | NullPointerException ex) {
-                        return ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".scoreboard-next-rank-none"));
-                    }
-                }
-            }
-        }
-        System.out.println("Could not find next rank of " + user.getName() + ".");
-        return null;
     }
 }

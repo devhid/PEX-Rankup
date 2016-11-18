@@ -1,17 +1,17 @@
 package net.devhid.pexrankup.api;
 
+import net.devhid.pexrankup.RankupManager;
 import net.devhid.pexrankup.RankupPlugin;
-import net.devhid.pexrankup.commands.RankupCommand;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionUser;
 
 import java.math.BigDecimal;
 
 public class RankupAPI {
-    private final RankupCommand rankupCommand;
+    private final RankupManager rankupManager;
 
     public RankupAPI() {
-        this.rankupCommand = new RankupCommand(RankupPlugin.getPlugin());
+        this.rankupManager = new RankupManager(RankupPlugin.getPlugin());
     }
 
     /**
@@ -21,7 +21,7 @@ public class RankupAPI {
      * @return       the balance of the user in BigDecimal representation.
      **/
     public BigDecimal getBalance(Player player) {
-        return rankupCommand.getBalance(player);
+        return rankupManager.getBalance(player);
     }
 
     /**
@@ -31,7 +31,7 @@ public class RankupAPI {
      * @return     the user's current PEX group name in String representation.
      **/
     public String getCurrentGroup(PermissionUser user) {
-        return rankupCommand.getCurrentGroup(user);
+        return rankupManager.getCurrentGroup(user);
     }
 
     /**
@@ -41,7 +41,7 @@ public class RankupAPI {
      * @return     the user's next rank name in the ladder in String representation.
      **/
     public String getNextRank(PermissionUser user) {
-        return rankupCommand.getNextRank(user);
+        return rankupManager.getNextRank(user);
     }
 
     /**
@@ -51,7 +51,7 @@ public class RankupAPI {
      * @return     the difference between the next rank's cost and the user's balance in BigDecimal representation.
      **/
     public BigDecimal getRemainingPrice(PermissionUser user) {
-        return rankupCommand.getRemainingPrice(user);
+        return rankupManager.getRemainingPrice(user);
     }
 
     /**
@@ -62,7 +62,7 @@ public class RankupAPI {
      * @return     the difference between the next rank's cost and the user's balance in formatted String representation.
      **/
     public String getRemainingPriceFormatted(PermissionUser user) {
-        return rankupCommand.getRemainingPriceFormatted(user);
+        return rankupManager.getRemainingPriceFormatted(user);
     }
 
     /**
@@ -72,7 +72,7 @@ public class RankupAPI {
      * @return     the cost of the user's next rank in the ladder in BigDecimal representation.
      **/
     public BigDecimal getCostOfNextRank(PermissionUser user) {
-        return rankupCommand.getCostOfNextRank(user);
+        return rankupManager.getCostOfNextRank(user);
     }
 
     /**
@@ -82,7 +82,7 @@ public class RankupAPI {
      * @return     the cost of the user's next rank in the ladder in String representation.
      **/
     public String getCostOfNextRankString(PermissionUser user) {
-        return rankupCommand.getCostOfNextRankString(user);
+        return rankupManager.getCostOfNextRankString(user);
     }
 
     /**
@@ -93,6 +93,6 @@ public class RankupAPI {
      * @return     the cost of the user's next rank in the ladder in a formatted String representation.
      **/
     public String getCostOfNextRankFormatted(PermissionUser user) {
-        return rankupCommand.getCostOfNextRankFormatted(user);
+        return rankupManager.getCostOfNextRankFormatted(user);
     }
 }

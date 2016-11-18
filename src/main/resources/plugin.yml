@@ -14,3 +14,6 @@ commands:
     pexrankup-ranks:
         aliases: [ranks]
         description: List all ranks and their prices in the ladder.
+    pexrankup-reload:
+        aliases: [pr-reload, prr]
+        description: Reloads the configuration file.

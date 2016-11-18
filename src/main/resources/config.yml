@@ -1,7 +1,7 @@
 #===============================================[ Notes ]================================================#
 # name: PEX-Rankup                                                                                       #
 # author: Hid                                                                                            #
-# version: 2.3.1                                                                                         #
+# version: 2.3.5                                                                                         #
 # notice: This plugin will work with both Java 7 and 8.                                                  #
 #========================================================================================================#
 
@@ -18,7 +18,8 @@ RANKUP:
   last-rank-message: "&cYou already have the last rank."
 
   not-enough-money: "&7You need &c${cost} &7to rank up to &c{rank}&7."
-  rank-up-message: "&7You have successfully ranked up to &c{rank}&7."
+  rank-up-message:
+      player-message: "&aYou have successfully ranked up to {rank}."
       broadcast: true
       broadcast-message: "&c{username} &7has ranked up to &c{rank}&7."
 

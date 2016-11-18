@@ -1,35 +1,47 @@
 package net.devhid.pexrankup;
 
+import lombok.Getter;
 import net.devhid.pexrankup.api.RankupAPI;
 import net.devhid.pexrankup.commands.RanksCommand;
 import net.devhid.pexrankup.commands.RankupCommand;
+import net.devhid.pexrankup.commands.ReloadCommand;
 import net.devhid.pexrankup.commands.SetRankCommand;
 import net.devhid.pexrankup.util.ChatUtil;
-import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RankupPlugin extends JavaPlugin {
+    @Getter
     private static Economy economy;
+
+    @Getter
     private static RankupAPI rankupAPI;
+
+    @Getter
+    private RankupManager rankupManager;
 
     public void onEnable() {
         saveDefaultConfig();
-        loadCommands();
-
         setupVault();
+
+        rankupManager = new RankupManager(this);
         rankupAPI = new RankupAPI();
+
+        loadCommands();
     }
 
     public String getPrefix() {
-        return (getConfig().getBoolean("MAIN" + ".prefix-enabled")) ? ChatUtil.color(getConfig().getString("MAIN" + ".prefix")) : "";
+        return (getConfig().getBoolean("MAIN" + ".prefix-enabled"))
+                ? ChatUtil.color(getConfig().getString("MAIN" + ".prefix")) : "";
     }
 
     private void loadCommands() {
-        getCommand("rankup").setExecutor(new RankupCommand(this));
-        getCommand("ranks").setExecutor(new RanksCommand(this));
-        getCommand("setrank").setExecutor(new SetRankCommand(this));
+        getCommand("pexrankup-rankup").setExecutor(new RankupCommand(this));
+        getCommand("pexrankup-ranks").setExecutor(new RanksCommand(this));
+        getCommand("pexrankup-setrank").setExecutor(new SetRankCommand(this));
+        getCommand("pexrankup-reload").setExecutor(new ReloadCommand(this));
     }
 
     private void setupVault() {
@@ -54,13 +66,5 @@ public final class RankupPlugin extends JavaPlugin {
 
     public static RankupPlugin getPlugin() {
         return JavaPlugin.getPlugin(RankupPlugin.class);
-    }
-
-    public static Economy getEconomy() {
-        return economy;
-    }
-
-    public static RankupAPI getRankupAPI() {
-        return rankupAPI;
     }
 }

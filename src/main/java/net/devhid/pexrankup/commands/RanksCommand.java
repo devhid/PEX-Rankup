@@ -3,20 +3,18 @@ package net.devhid.pexrankup.commands;
 import net.devhid.pexrankup.RankupPlugin;
 import net.devhid.pexrankup.util.ChatUtil;
 import net.devhid.pexrankup.util.CommandUtil;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class RanksCommand implements CommandExecutor {
     private final RankupPlugin plugin;
-    private final FileConfiguration config;
 
     public RanksCommand(RankupPlugin plugin) {
         this.plugin = plugin;
-        this.config = plugin.getConfig();
     }
 
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
@@ -30,12 +28,12 @@ public class RanksCommand implements CommandExecutor {
             return true;
         }
 
-        cs.sendMessage(prefix + ChatUtil.color(config.getString("RANKUP" + ".rank-list")));
+        cs.sendMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".rank-list")));
 
-        for (String rank : config.getConfigurationSection("LADDER").getKeys(false)) {
-            String cost = new DecimalFormat("#,###").format(BigDecimal.valueOf(config.getDouble("LADDER." + rank)));
+        for (String rank : plugin.getConfig().getConfigurationSection("LADDER").getKeys(false)) {
+            String cost = new DecimalFormat("#,###").format(BigDecimal.valueOf(plugin.getConfig().getDouble("LADDER." + rank)));
 
-            cs.sendMessage(ChatUtil.color(config.getString("RANKUP" + ".rank-list-format")
+            cs.sendMessage(ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".rank-list-format")
                     .replace("{rank}", rank)
                     .replace("{cost}", cost)));
         }

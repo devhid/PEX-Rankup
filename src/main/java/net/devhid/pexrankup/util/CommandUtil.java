@@ -1,11 +1,13 @@
 package net.devhid.pexrankup.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.devhid.pexrankup.Lang;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CommandUtil {
-    private CommandUtil() {}
 
     public static class CommandException extends RuntimeException {
         CommandException(String msg) {
