@@ -24,10 +24,12 @@ public class SetRankCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         String prefix = plugin.getPrefix();
 
-        Player target = Bukkit.getPlayer(args[0]);
+        Player target;
         try {
             CommandUtil.checkPerm(sender, "pexrankup.setrank");
             CommandUtil.checkArgs(args, 2);
+
+            target = Bukkit.getPlayer(args[0]);
             CommandUtil.checkOnline(target);
         } catch(CommandUtil.CommandException ex) {
             sender.sendMessage(prefix + ex.getMessage());
@@ -37,20 +39,24 @@ public class SetRankCommand implements CommandExecutor {
         String group = args[1];
 
         if(!rankupManager.isValid(group)) {
-            sender.sendMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".setrank-invalid-rank")));
+            sender.sendMessage(prefix + ChatUtil.color(
+                    plugin.getConfig().getString("RANKUP" + ".setrank-invalid-rank")));
             return true;
         }
 
-        final PermissionUser user = PermissionsEx.getUser(target);
+        PermissionUser user = PermissionsEx.getUser(target);
         rankupManager.executeCommands(user, group, "setrank");
 
         user.setParentsIdentifier(rankupManager.setRank(user, group));
         user.save();
 
-        sender.sendMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".setrank-success")
+        sender.sendMessage(prefix + ChatUtil.color(
+                plugin.getConfig().getString("RANKUP" + ".setrank-success")
                 .replace("{username}", target.getName())
                 .replace("{rank}", group)));
-        target.sendMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".setrank-received")
+
+        target.sendMessage(prefix + ChatUtil.color(
+                plugin.getConfig().getString("RANKUP" + ".setrank-received")
                 .replace("{rank}", group)));
 
         return true;

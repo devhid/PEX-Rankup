@@ -96,6 +96,10 @@ public class RankupManager {
         return false;
     }
 
+    public boolean checkLastRank(PermissionUser user) {
+        return getCurrentGroup(user).equalsIgnoreCase(plugin.getConfig().getString("RANKUP" + ".last-rank"));
+    }
+
     public BigDecimal getBalance(Player player) {
         return BigDecimal.valueOf(RankupPlugin.getEconomy().getBalance(player));
     }
@@ -105,7 +109,8 @@ public class RankupManager {
     }
 
     public BigDecimal getRemainingPrice(PermissionUser user) {
-        return getCostOfNextRank(user).subtract(getBalance(user.getPlayer()));
+        BigDecimal diff = getCostOfNextRank(user).subtract(getBalance(user.getPlayer()));
+        return  (diff.doubleValue() < 0 || checkLastRank(user)) ? BigDecimal.ZERO : diff;
     }
 
     public String getBalanceString(Player player) {

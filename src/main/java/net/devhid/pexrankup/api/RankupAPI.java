@@ -15,16 +15,6 @@ public class RankupAPI {
     }
 
     /**
-     * Returns the balance of the specified player.
-     *
-     * @param player the Player whose balance is being grabbed.
-     * @return       the balance of the user in BigDecimal representation.
-     **/
-    public BigDecimal getBalance(Player player) {
-        return rankupManager.getBalance(player);
-    }
-
-    /**
      * Returns the specified user's current PEX group.
      *
      * @param user the PermissionUser whose group is being grabbed.
@@ -45,6 +35,37 @@ public class RankupAPI {
     }
 
     /**
+     * Returns the balance of the specified player.
+     *
+     * @param player the Player whose balance is being grabbed.
+     * @return       the balance of the user in BigDecimal representation.
+     **/
+    public BigDecimal getBalance(Player player) {
+        return rankupManager.getBalance(player);
+    }
+
+    /**
+     * Returns the balance of the specified player.
+     *
+     * @param player the Player whose balance is being grabbed.
+     * @return       the balance of the user in String representation.
+     **/
+    public String getBalanceString(Player player) {
+        return rankupManager.getBalanceString(player);
+    }
+
+    /**
+     * Returns the balance of the specified player.
+     * Adds commas and removes scientific notation.
+     *
+     * @param player the Player whose balance is being grabbed.
+     * @return       the balance of the user in formatted String representation.
+     **/
+    public String getBalanceFormatted(Player player) {
+        return rankupManager.getBalanceFormatted(player);
+    }
+
+    /**
      * Returns the money required to rank up to the next rank.
      *
      * @param user the PermissionUser whose remaining rank price is being calculated.
@@ -52,6 +73,16 @@ public class RankupAPI {
      **/
     public BigDecimal getRemainingPrice(PermissionUser user) {
         return rankupManager.getRemainingPrice(user);
+    }
+
+    /**
+     * Returns the money required to rank up to the next rank.
+     *
+     * @param user the PermissionUser whose remaining rank price is being calculated.
+     * @return     the difference between the next rank's cost and the user's balance in String representation.
+     **/
+    public String getRemainingPriceString(PermissionUser user) {
+        return rankupManager.getRemainingPriceString(user);
     }
 
     /**

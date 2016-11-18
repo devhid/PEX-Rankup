@@ -65,26 +65,29 @@ public class RankupCommand implements CommandExecutor {
             PreRankupEvent preRankupEvent = new PreRankupEvent(ps, group, nextRank, balance.doubleValue(), rawCost.doubleValue());
             plugin.getServer().getPluginManager().callEvent(preRankupEvent);
 
-            if(!preRankupEvent.isCancelled()) {
-                if (RankupPlugin.getEconomy().withdrawPlayer(ps, rawCost.doubleValue()).transactionSuccess()) {
+            if(preRankupEvent.isCancelled()) {
+                return true;
+            }
 
-                    rankupManager.executeCommands(user, nextRank, "rankup");
+            if (RankupPlugin.getEconomy().withdrawPlayer(ps, rawCost.doubleValue()).transactionSuccess()) {
 
-                    user.setParentsIdentifier(rankupManager.udpateRank(user));
-                    user.save();
+                rankupManager.executeCommands(user, nextRank, "rankup");
 
-                    group = rankupManager.getCurrentGroup(user);
+                user.setParentsIdentifier(rankupManager.udpateRank(user));
+                user.save();
 
-                    if(plugin.getConfig().getBoolean("RANKUP" + ".rank-up-message.broadcast")) {
-                        plugin.getServer().broadcastMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".rank-up-message.broadcast-message")
-                                .replace("{username}", ps.getName()).replace("{rank}", group)));
-                    }
+                group = rankupManager.getCurrentGroup(user);
 
-                    sender.sendMessage(ChatUtil.color(prefix + plugin.getConfig().getString("RANKUP" + ".rank-up-message.player-message")
-                            .replace("{rank}", group)));
-
-                    plugin.getServer().getPluginManager().callEvent(new PostRankupEvent(ps, nextRank, balance.doubleValue()));
+                if(plugin.getConfig().getBoolean("RANKUP" + ".rank-up-message.broadcast")) {
+                    plugin.getServer().broadcastMessage(prefix + ChatUtil.color(plugin.getConfig().getString("RANKUP" + ".rank-up-message.broadcast-message")
+                            .replace("{username}", ps.getName()).replace("{rank}", group)));
                 }
+
+                sender.sendMessage(ChatUtil.color(prefix + plugin.getConfig().getString("RANKUP" + ".rank-up-message.player-message")
+                        .replace("{rank}", group)));
+
+                plugin.getServer().getPluginManager().callEvent(new PostRankupEvent(ps, nextRank, balance.doubleValue()));
+
             }
         }
         return true;
